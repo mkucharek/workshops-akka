@@ -1,8 +1,10 @@
 package org.rbudzko.fundamentals.market
 
+
 import akka.actor.{Actor, ActorRef}
 
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Living exchange playing role of mediator between buyers.
@@ -10,8 +12,8 @@ import scala.concurrent.duration._
 class Exchange(seller: ActorRef, good: Good) extends Actor {
 
   val hourglass = context.system.scheduler.scheduleOnce(5 seconds, context.self, TimeUp)
-  var winner = None[ActorRef]
-  var offer = None[Long]
+  var winner = Option.empty[ActorRef]
+  var offer = Option.empty[Long]
 
   val finalizing = {
     ???
@@ -19,7 +21,7 @@ class Exchange(seller: ActorRef, good: Good) extends Actor {
 
   override def receive = {
     case Bid(gold) => bid(sender(), gold)
-    case AskForDescription => sender() ! Description(good, offer)
+    case AskForDescription => sender() ! Description(good, offer.getOrElse(0))
     case TimeUp => context.become(finalizing)
     case _ => unhandled _
   }

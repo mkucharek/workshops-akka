@@ -1,5 +1,9 @@
 package org.rbudzko.fundamentals
 
-object Main extends App {
+/**
+ * Main class to setup actor system.
+ */
 
+object Main extends App {
+  ???
 }

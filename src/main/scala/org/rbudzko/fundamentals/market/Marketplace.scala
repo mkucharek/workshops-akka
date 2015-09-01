@@ -3,6 +3,7 @@ package org.rbudzko.fundamentals.market
 import akka.actor.{Actor, ActorRef}
 
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Marketplace spawns new merchants and broadcasts new offers to all of them.
@@ -16,7 +17,7 @@ class Marketplace extends Actor {
   override def receive = {
     case OfferTransaction(transaction) => broadcast(transaction)
     case MerchantSpawn => spawn()
-    case _ => unhandled(_)
+    case _ => unhandled _
   }
 
   def spawn() = ???

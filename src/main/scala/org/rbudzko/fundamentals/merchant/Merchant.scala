@@ -6,6 +6,7 @@ import akka.actor.{Actor, ActorRef, Props}
 import org.rbudzko.fundamentals.market._
 
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Merchant base to inherit from.
