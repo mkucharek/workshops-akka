@@ -16,11 +16,11 @@ abstract class Merchant(var gold: Long, var items: List[Good], val marketplace: 
 
   val instinct = context.system.scheduler.schedule(3 seconds, 3 seconds, context.self, TimeToTrade)
 
-  def evaluate(good: Good, price: Long)
+  def evaluate(good: Good, price: Option[Long], winner: Option[ActorRef])
 
   override def receive = {
     case OfferTransaction(transaction) => transaction ! AskForDescription
-    case Description(good, price) => evaluate(good, price)
+    case Description(good, price, winner) => evaluate(good, price, winner)
     case Transfer(amount) => gold = gold + amount
     case Give(good) => items = good :: items
     case TimeToTrade =>

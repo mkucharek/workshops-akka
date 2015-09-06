@@ -8,11 +8,11 @@ import org.rbudzko.fundamentals.market.{Bid, Good, Slave}
  */
 
 class SlaveMerchant(initialGold: Long, initialItems: List[Good], marketplace: ActorRef) extends Merchant(initialGold, initialItems, marketplace) {
-  override def evaluate(good: Good, price: Long) = {
-    // TODO Replace with partial function
-    good match {
-      case Slave(name, age) => if (price < 40 - age) sender() ! Bid(price + 1)
-      case _ =>
-    }
+  override def evaluate(good: Good, price: Option[Long], winner: Option[ActorRef]) = {
+    if (winner.isEmpty || !self.eq(winner.get))
+      good match {
+        case Slave(name, age) => if (price.getOrElse(0L) < 40L - age) sender() ! Bid(price.getOrElse(0L) + 1L)
+        case _ =>
+      }
   }
 }

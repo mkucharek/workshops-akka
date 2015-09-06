@@ -21,7 +21,7 @@ class Exchange(seller: ActorRef, good: Good) extends Actor {
 
   override def receive = {
     case Bid(gold) => bid(sender(), gold)
-    case AskForDescription => sender() ! Description(good, offer.getOrElse(0))
+    case AskForDescription => sender() ! Description(good, offer, winner)
     case TimeUp => context.become(finalizing)
     case _ => unhandled _
   }
@@ -39,7 +39,7 @@ class Exchange(seller: ActorRef, good: Good) extends Actor {
 
 case class Bid(gold: Long)
 
-case class Description(good: Good, gold: Long)
+case class Description(good: Good, gold: Option[Long], winner: Option[ActorRef])
 
 object AskForDescription
 
