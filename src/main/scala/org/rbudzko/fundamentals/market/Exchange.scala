@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 class Exchange(seller: ActorRef, good: Good) extends Actor {
 
   val log = Logging(context.system, this)
-  val hourglass = context.system.scheduler.scheduleOnce(1 seconds, context.self, TimeUp)
+  val hourglass = context.system.scheduler.scheduleOnce(3 seconds, context.self, TimeUp)
   var winner = Option.empty[ActorRef]
   var offer = Option.empty[Long]
 
@@ -25,8 +25,14 @@ class Exchange(seller: ActorRef, good: Good) extends Actor {
     case _ => unhandled _
   }
 
+  /**
+   * Should handle bid offer from merchant.
+   */
   def bid(buyer: ActorRef, gold: Long) = ???
 
+  /**
+   * Should finalize transaction.
+   */
   def exchange() = ???
 
   override def postStop() = hourglass.cancel()

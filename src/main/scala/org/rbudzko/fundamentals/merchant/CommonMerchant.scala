@@ -8,5 +8,8 @@ import org.rbudzko.fundamentals.market.{Bid, Good, Slave}
  */
 
 class CommonMerchant(initialGold: Long, initialItems: List[Good], marketplace: ActorRef) extends Merchant(initialGold, initialItems, marketplace) {
+  /**
+   * Should trade somehow.
+   */
   override def evaluate(good: Good, price: Option[Long], winner: Option[ActorRef]) = ???
 }

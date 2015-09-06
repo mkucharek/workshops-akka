@@ -15,7 +15,7 @@ import scala.concurrent.duration._
 abstract class Merchant(var gold: Long, var items: List[Good], val marketplace: ActorRef) extends Actor {
 
   val log = Logging(context.system, this)
-  val instinct = context.system.scheduler.schedule(10 seconds, 10 seconds, context.self, TimeToTrade)
+  val instinct = context.system.scheduler.schedule(2 seconds, 10 seconds, context.self, TimeToTrade)
 
   def evaluate(good: Good, price: Option[Long], winner: Option[ActorRef])
 

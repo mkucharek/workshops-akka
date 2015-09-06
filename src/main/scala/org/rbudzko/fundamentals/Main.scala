@@ -15,12 +15,11 @@ object Main extends App {
   val number = new AtomicInteger(1)
   val system = ActorSystem()
   val random = new Random()
-  val merchants = List.apply(???)
 
-  system.actorOf(Props(classOf[Marketplace], merchants))
+  system.actorOf(Props[Marketplace], "Marketplace")
 
-  def should() = {
-    Math.abs(random.nextInt()) % 5 < 2
+  def awareness() = {
+    Math.abs(random.nextInt()) % 100 < 75
   }
 
   def index() = {
