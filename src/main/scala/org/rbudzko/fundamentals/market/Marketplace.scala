@@ -1,8 +1,7 @@
 package org.rbudzko.fundamentals.market
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorRef}
 import akka.event.Logging
-import org.rbudzko.fundamentals.merchant.SlaveMerchant
 
 /**
  * Marketplace spawns new merchants and broadcasts new offers to all of them.

@@ -1,7 +1,7 @@
 package org.rbudzko.fundamentals.merchant
 
 import akka.actor.ActorRef
-import org.rbudzko.fundamentals.market.{Bid, Good, Slave}
+import org.rbudzko.fundamentals.market.Good
 
 /**
  * Merchant interested in all types of goods.
