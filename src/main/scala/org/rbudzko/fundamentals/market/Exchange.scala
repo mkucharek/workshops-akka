@@ -1,8 +1,9 @@
 package org.rbudzko.fundamentals.market
 
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, PoisonPill}
 import akka.event.Logging
+import org.rbudzko.fundamentals.merchant.{Give, Transfer}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -27,12 +28,38 @@ class Exchange(seller: ActorRef, good: Good) extends Actor {
   /**
    * Should handle bid offer from merchant.
    */
-  def bid(buyer: ActorRef, gold: Long) = ???
+  def bid(buyer: ActorRef, gold: Long) = {
+    var watching = List(buyer)
 
-  /**
-   * Should finalize transaction.
-   */
-  def exchange() = ???
+    /**
+     * Should finalize transaction.
+     */
+    if (offer.getOrElse(0L) < gold) {
+      if (winner.isDefined) {
+        watching = winner.get :: watching
+      }
+
+      offer = Option(gold)
+      winner = Option(buyer)
+    } else {
+      log.info("Late bid from [{}]", sender())
+    }
+
+    watching.foreach(_ ! Description(good, offer, winner))
+  }
+
+  def exchange() = {
+    if (winner.isDefined) {
+      winner.foreach(_ ! Transfer(Math.negateExact(offer.getOrElse(0L))))
+      winner.foreach(_ ! Give(good))
+
+      seller ! Transfer(offer.getOrElse(0L))
+    } else {
+      seller ! Give(good)
+    }
+
+    self ! PoisonPill
+  }
 
   override def postStop() = hourglass.cancel()
 }
