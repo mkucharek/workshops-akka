@@ -1,7 +1,8 @@
 package org.rbudzko.fundamentals.market
 
-import akka.actor.{Terminated, Actor, ActorRef}
+import akka.actor.{Terminated, Props, Actor, ActorRef}
 import akka.event.Logging
+import org.rbudzko.fundamentals.merchant.{CommonMerchant, SlaveMerchant}
 
 /**
  * Marketplace spawns new merchants and broadcasts new offers to all of them.
@@ -19,9 +20,9 @@ class Marketplace extends Actor {
     participants = List.apply(
       context.actorOf(Props(classOf[SlaveMerchant], 80L, List(Slave(15), Slave(31), Cow(2)), self), "Guid"),
       context.actorOf(Props(classOf[SlaveMerchant], 50L, List(Slave(23), Slave(15)), self), "Sam"),
-      context.actorOf(Props(classOf[SlaveMerchant], 200L, List(), self), "Sylva"),
-      context.actorOf(Props(classOf[SlaveMerchant], 50L, List(Slave(31), Slave(43), Cow(1)), self), "Ariel"),
-      context.actorOf(Props(classOf[SlaveMerchant], 50L, List(Slave(1), Cow(4)), self), "Dod")
+      context.actorOf(Props(classOf[CommonMerchant], 200L, List(), self), "Sylva"),
+      context.actorOf(Props(classOf[CommonMerchant], 50L, List(Slave(31), Cow(3), Cow(1)), self), "Ariel"),
+      context.actorOf(Props(classOf[CommonMerchant], 50L, List(Slave(1), Cow(4)), self), "Dod")
     )
 
     participants.foreach(context.watch)
