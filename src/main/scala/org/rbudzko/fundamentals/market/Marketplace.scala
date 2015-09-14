@@ -18,9 +18,9 @@ class Marketplace extends Actor {
    */
   override def preStart() = {
     participants = List.apply(
-      context.actorOf(Props(classOf[SlaveMerchant], 80L, List(Slave(15), Slave(31), Cow(2)), self), "Guid"),
-      context.actorOf(Props(classOf[SlaveMerchant], 50L, List(Slave(23), Slave(15)), self), "Sam"),
-      context.actorOf(Props(classOf[CommonMerchant], 200L, List(), self), "Sylva"),
+      context.actorOf(Props(classOf[SlaveMerchant], 100L, List(Slave(15), Slave(31), Cow(2)), self), "Guid"),
+      context.actorOf(Props(classOf[SlaveMerchant], 30L, List(Slave(23), Slave(15)), self), "Sam"),
+      context.actorOf(Props(classOf[CommonMerchant], 20L, List(), self), "Sylva"),
       context.actorOf(Props(classOf[CommonMerchant], 50L, List(Slave(31), Cow(3), Cow(1)), self), "Ariel"),
       context.actorOf(Props(classOf[CommonMerchant], 50L, List(Slave(1), Cow(4)), self), "Dod")
     )
