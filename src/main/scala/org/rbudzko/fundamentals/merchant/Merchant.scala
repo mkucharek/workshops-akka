@@ -1,6 +1,6 @@
 package org.rbudzko.fundamentals.merchant
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{PoisonPill, Actor, ActorRef, Props}
 import akka.event.Logging
 import org.rbudzko.fundamentals.Main
 import org.rbudzko.fundamentals.market._
@@ -26,6 +26,10 @@ abstract class Merchant(var gold: Long, var items: List[Good], val marketplace: 
       log.info("Receiving transfer [{}].", amount)
       gold = gold + amount
       log.info("New wallet [{}].", gold)
+      if (gold < 0) {
+        log.info("I've cheated - Seppuku!")
+        self ! PoisonPill
+      }
     case Give(good) =>
       log.info("Receiving good [{}].", good)
       items = good :: items

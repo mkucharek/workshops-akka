@@ -20,8 +20,7 @@ class Exchange(seller: ActorRef, good: Good) extends Actor {
   override def receive = {
     case Bid(gold) => bid(sender(), gold)
     case AskForDescription => sender() ! Description(good, offer, winner)
-    case TimeUp =>
-      exchange()
+    case TimeUp => exchange()
     case _ => unhandled _
   }
 
