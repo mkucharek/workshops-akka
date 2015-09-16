@@ -1,6 +1,6 @@
 package org.rbudzko.fundamentals.merchant
 
-import akka.actor.{PoisonPill, Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, PoisonPill, Props}
 import akka.event.Logging
 import org.rbudzko.fundamentals.Main
 import org.rbudzko.fundamentals.market._
@@ -19,6 +19,10 @@ abstract class Merchant(var gold: Long, var items: List[Good], val marketplace: 
 
   def evaluate(good: Good, price: Option[Long], winner: Option[ActorRef])
 
+  val depressed: Receive = {
+    case any: Any => log.warning("I'm depressed, because I'll die in a moment, so I ignore [{}].", any)
+  }
+
   override def receive = {
     case OfferTransaction(transaction) => transaction ! AskForDescription
     case Description(good, price, winner) => evaluate(good, price, winner)
@@ -29,6 +33,7 @@ abstract class Merchant(var gold: Long, var items: List[Good], val marketplace: 
       if (gold < 0) {
         log.info("I've cheated - Seppuku!")
         self ! PoisonPill
+        context.become(depressed)
       }
     case Give(good) =>
       log.debug("Receiving good [{}].", good)

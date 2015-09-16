@@ -42,7 +42,7 @@ class Exchange(seller: ActorRef, good: Good) extends Actor {
       offer = Option(gold)
       winner = Option(buyer)
     } else {
-      log.info("Late bid from [{}]", sender())
+      log.warning("Late bid from [{}]", sender().path.name)
     }
 
     watching.foreach(_ ! Description(good, offer, winner))
