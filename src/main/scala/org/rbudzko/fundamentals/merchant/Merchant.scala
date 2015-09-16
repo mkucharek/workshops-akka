@@ -23,7 +23,7 @@ abstract class Merchant(var gold: Long, var items: List[Good], val marketplace: 
     case OfferTransaction(transaction) => transaction ! AskForDescription
     case Description(good, price, winner) => evaluate(good, price, winner)
     case Transfer(amount) =>
-      log.info("Receiving transfer [{}].", amount)
+      log.debug("Receiving transfer [{}].", amount)
       gold = gold + amount
       log.info("New wallet [{}].", gold)
       if (gold < 0) {
@@ -31,20 +31,20 @@ abstract class Merchant(var gold: Long, var items: List[Good], val marketplace: 
         self ! PoisonPill
       }
     case Give(good) =>
-      log.info("Receiving good [{}].", good)
+      log.debug("Receiving good [{}].", good)
       items = good :: items
       log.info("New list of items [{}].", items)
     case TimeToTrade =>
-      if (items.nonEmpty) {
+      if (items.nonEmpty && Main.awareness()) {
         log.info("Deciding to trade [{}].", items.head)
         marketplace ! OfferTransaction(
           context.actorOf(
             Props(classOf[Exchange], self, items.head),
             "transaction-" + self.path.name + "-" + Main.index()))
         items = items.drop(1)
-        log.info("New list of items [{}].", items)
+        log.debug("New list of items [{}].", items)
       } else {
-        log.info("Want to trade, but no items to trade atm...")
+        log.debug("Want to trade, but no items to trade atm...")
       }
   }
 

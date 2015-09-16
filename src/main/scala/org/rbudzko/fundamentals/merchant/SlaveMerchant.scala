@@ -15,13 +15,13 @@ class SlaveMerchant(initialGold: Long, initialItems: List[Good], marketplace: Ac
         case Slave(age) =>
           if (price.getOrElse(0L) < 40L - age) {
             val bid = Bid(price.getOrElse(0L) + 1L)
-            log.info("I'm interested in slave of age [{}]! Will bid [{}].", age, bid.gold)
+            log.info("I'm interested in [{}]! Will bid [{}].", good, bid.gold)
             sender() ! bid
           } else {
-            log.info("Nah, this slave is too expensive.")
+            log.debug("Nah, this slave is too expensive.")
           }
         case _ =>
-          log.info("Nah, it's not a slave.")
+          log.debug("Nah, it's not a slave.")
       }
   }
 }
