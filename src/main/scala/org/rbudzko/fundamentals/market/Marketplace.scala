@@ -1,6 +1,6 @@
 package org.rbudzko.fundamentals.market
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Terminated, Actor, ActorRef}
 import akka.event.Logging
 
 /**
@@ -19,10 +19,13 @@ class Marketplace extends Actor {
     participants = List.apply(
       ???
     )
+
+    participants.foreach(context.watch)
   }
 
   override def receive = {
     case OfferTransaction(transaction) => broadcast(transaction)
+    case Terminated(merchant) => ???
     case _ => unhandled _
   }
 
