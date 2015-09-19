@@ -30,7 +30,7 @@ class Marketplace extends Actor {
 
   override def receive = {
     case OfferTransaction(transaction) => broadcast(transaction)
-    case Terminated(merchant) => ???
+    case Terminated(merchant) => participants = participants.filterNot(_ eq merchant)
     case _ => unhandled _
   }
 
