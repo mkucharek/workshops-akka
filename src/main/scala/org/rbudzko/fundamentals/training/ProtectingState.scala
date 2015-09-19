@@ -26,5 +26,10 @@ class CountingScribe extends Actor {
   val log = Logging(context.system, this)
   var counted = 0L
 
-  override def receive = ???
+  override def receive = {
+    case sentence: String =>
+      counted += sentence.length
+      log.info("Received sentence [{}] and it's length is [{}]. Counted [{}] so far.", sentence, sentence.length, counted)
+    case any: Any => throw new IllegalArgumentException()
+  }
 }

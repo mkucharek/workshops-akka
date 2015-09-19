@@ -24,5 +24,8 @@ object CreatingActor extends App {
 class Scribe extends Actor {
   val log = Logging(context.system, this)
 
-  override def receive = ???
+  override def receive = {
+    case sentence: String => log.info("Received sentence [{}] and it's length is [{}].", sentence, sentence.length)
+    case any: Any => log.warning("I'm simple scribe. What should I do with [{}]?", any)
+  }
 }
